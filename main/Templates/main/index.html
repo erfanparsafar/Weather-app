@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Weather App</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <style>
+    /* Custom styling for a cleaner look */
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      background-color: #007bff;
+      color: #ffffff;
+    }
+
+    .navbar h1 {
+      font-size: 1.8rem;
+      margin: 0;
+    }
+
+    .form-container {
+      margin-top: 30px;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .result-container h3, .result-container h5 {
+      color: #343a40;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <h1 class="navbar-brand">Weather App</h1>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 form-container">
+        <h4 class="text-center mb-4">Search Weather by City</h4>
+        
+        <!-- Search Form -->
+        <form method="post">
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="city" placeholder="Enter city name" aria-label="City">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit">
+                <i class="glyphicon glyphicon-search"></i> Search
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Weather Data Results -->
+        {% if country_code and coordinate and temp and pressure and humidity %}
+        <div class="result-container mt-4">
+          <h3 class="text-center">Weather Details</h3>
+          <h5>Country Code: <strong>{{country_code}}</strong></h5>
+          <h5>Coordinates: <strong>{{coordinate}}</strong></h5>
+          <h5>Temperature: <strong>{{temp}}</strong></h5>
+          <h5>Pressure: <strong>{{pressure}}</strong></h5>
+          <h5>Humidity: <strong>{{humidity}}</strong></h5>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

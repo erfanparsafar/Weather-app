@@ -34,7 +34,7 @@ def index(request):
                 data['error'] = "City not found. Please enter a valid city name."
             except Exception as e:
                 data['error'] = f"An error occurred: {e}"
-    return render(request, "main/index.html", data)
+    return render(request, "index.html", data)
 
 def get_clothing_suggestion(temp_celsius):
     """Return a clothing suggestion based on temperature in Celsius."""

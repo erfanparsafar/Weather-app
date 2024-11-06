@@ -1,69 +1,115 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
 <head>
   <meta charset="utf-8">
   <title>Weather App</title>
-  <!-- Bootstrap CSS -->
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-  <!-- Bootstrap JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
   <style>
-    /* Custom styling for a cleaner look */
+    /* General styling */
     body {
-      background-color: #f8f9fa;
       font-family: Arial, sans-serif;
+      transition: background-color 0.5s, color 0.5s;
+      background-color: #f8f9fa;
+      color: #343a40;
     }
-
-    .navbar {
-      background-color: #007bff;
-      color: #ffffff;
+    .dark-mode {
+      background-color: #1c1c1c;
+      color: #e0e0e0;
     }
-
-    .navbar h1 {
-      font-size: 1.8rem;
-      margin: 0;
-    }
-
     .form-container {
       margin-top: 30px;
       padding: 20px;
       background: #ffffff;
       border-radius: 8px;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.5s;
     }
-
-    .result-container h3, .result-container h5 {
-      color: #343a40;
+    .dark-mode .form-container {
+      background: #333333;
+    }
+    .suggestion {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #ffffff;
+      background-color: #007bff;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dark-mode .suggestion {
+      background-color: #3a3a5a;
+      color: #ffea00;
+    }
+    .alert {
+      font-size: 1em;
+      color: #ffffff;
+      background-color: #dc3545;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .toggle-button {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #007bff;
+      color: #ffffff;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1em;
+    }
+    .dark-mode .toggle-button {
+      background: #ffdd57;
+      color: #333333;
+    }
+    footer {
+      font-size: 0.8em;
+      text-align: center;
+      margin-top: 20px;
+      color: #888888;
+    }
+    .dark-mode footer {
+      color: #bbbbbb;
     }
   </style>
+  <script>
+    // JavaScript to toggle light and dark mode
+    $(document).ready(function() {
+      $('.toggle-button').click(function() {
+        $('body').toggleClass('dark-mode');
+        $(this).text($('body').hasClass('dark-mode') ? '🌞 Light Mode' : '🌜 Night Mode');
+      });
+    });
+  </script>
 </head>
 
 <body>
+  <!-- دکمه light mode / night mode -->
+  <div class="toggle-button">🌜 Night Mode</div>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-      <h1 class="navbar-brand">Weather App</h1>
-    </div>
-  </nav>
+  <!-- هدر -->
+  <header class="text-center mt-3">
+    <h1>Check Weather</h1>
+  </header>
 
   <!-- Main content -->
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-6 form-container">
-        <h4 class="text-center mb-4">Search Weather by City</h4>
+        <h4 class="text-center mb-4">Search Weather by City 🌍</h4>
         
         <!-- Search Form -->
         <form method="post">
           {% csrf_token %}
           <div class="input-group mb-3">
-            <input type="text" class="form-control" name="city" placeholder="Enter city name" aria-label="City">
+            <input type="text" class="form-control" name="city" placeholder="Enter city name" aria-label="City" value="{{ request.POST.city }}">
             <div class="input-group-append">
               <button class="btn btn-primary" type="submit">
                 <i class="glyphicon glyphicon-search"></i> Search
@@ -72,20 +118,32 @@
           </div>
         </form>
 
+        <!-- نمایش alert -->
+        {% if error %}
+        <div class="alert">
+          ⚠️ {{ error }}
+        </div>
+        {% endif %}
+
         <!-- Weather Data Results -->
         {% if country_code and coordinate and temp and pressure and humidity %}
         <div class="result-container mt-4">
-          <h3 class="text-center">Weather Details</h3>
-          <h5>Country Code: <strong>{{country_code}}</strong></h5>
-          <h5>Coordinates: <strong>{{coordinate}}</strong></h5>
-          <h5>Temperature: <strong>{{temp}}</strong></h5>
-          <h5>Pressure: <strong>{{pressure}}</strong></h5>
-          <h5>Humidity: <strong>{{humidity}}</strong></h5>
+          <h3 class="text-center">Weather Details 🌤️</h3>
+          <h5>Country Code: <strong>{{ country_code }}</strong></h5>
+          <h5>Coordinates: <strong>{{ coordinate }}</strong></h5>
+          <h5>Temperature: <strong>{{ temp }} 🌡️</strong></h5>
+          <h5>Pressure: <strong>{{ pressure }} hPa 🌬️</strong></h5>
+          <h5>Humidity: <strong>{{ humidity }}% 💧</strong></h5>
+          <p class="suggestion">👕 {{ suggestion }}</p>
         </div>
         {% endif %}
       </div>
     </div>
   </div>
 
+  <!-- Footer -->
+  <footer>
+    written by erfan parsafar
+  </footer>
 </body>
 </html>
